@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+        </Property>
+    </Properties>
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <!-- Rolling File Appender -->
+        <RollingFile name="ServerLogsAppender" fileName="logs/server.log" 
+		             filePattern="logs/server-%d{yyyy-MM-dd}-%i.log">
+		    <PatternLayout>
+		        <Pattern>${LOG_PATTERN}</Pattern>
+		    </PatternLayout>
+		    <Policies>
+		        <Policies>
+				    <TimeBasedTriggeringPolicy interval="1" />
+				</Policies>
+		    </Policies>
+		    <DefaultRolloverStrategy max="10"/>
+		</RollingFile>
+		<RollingFile name="ApplicationLogsAppender" fileName="logs/url-shortner.log" 
+		             filePattern="logs/url-shortner-%d{yyyy-MM-dd}-%i.log">
+		    <PatternLayout>
+		        <Pattern>${LOG_PATTERN}</Pattern>
+		    </PatternLayout>
+		    <Policies>
+		        <Policies>
+				    <TimeBasedTriggeringPolicy interval="1" />
+				</Policies>
+		    </Policies>
+		    <DefaultRolloverStrategy max="10"/>
+		</RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="urlshortner" level="debug" additivity="false">
+            <AppenderRef ref="ApplicationLogsAppender"/>
+        </Logger>
+
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="ServerLogsAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
