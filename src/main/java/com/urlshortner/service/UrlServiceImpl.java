@@ -1,5 +1,7 @@
 package com.urlshortner.service;
 
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +35,22 @@ public class UrlServiceImpl implements UrlService {
 		} catch (Exception e) {
 			logger.info("Exception in UrlServiceImpl.generateShortenUrl(): " + e);
 		}
+	}
+
+	@Override
+	public Optional<UrlDTO> getOriginalUrl(String uid) {
+		Optional<UrlEntity> entity = Optional.empty();
+		UrlDTO dto = null;
+		try {
+			entity = vUrlRepository.findById(uid);
+			if (entity.isPresent()) {
+				dto = new UrlDTO();
+				BeanUtils.copyProperties(entity.get(), dto);
+			}
+		} catch (Exception e) {
+			logger.info("Exception in UrlServiceImpl.generateShortenUrl(): " + e);
+		}
+		return Optional.ofNullable(dto);
 	}
 
 }
